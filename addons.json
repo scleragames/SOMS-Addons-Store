@@ -1,13 +1,13 @@
 [
   {
     "id": "addon1",
-    "name": "Smooth Scroll Enhancer",
+    "name": "Better Export",
     "type": "free",
     "icon": "icons/free/addon1.png",
-    "description": "Adds buttery-smooth scrolling to your app.",
-    "file": "addons/free/addon1.zip",
-    "version": "1.2",
-    "author": "DevTeam"
+    "description": "better export for soms.",
+    "file": "addons/free/better_export.addon",
+    "version": "1.0",
+    "author": "Sclera Games"
   },
   {
     "id": "addon2",
