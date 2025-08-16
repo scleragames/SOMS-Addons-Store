@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Addon Store</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="light">
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>✨ Addon Store</h1>
+      <p>Browse and enhance your app experience</p>
+      <button id="theme-toggle" class="btn-icon" title="Toggle Theme">
+        🌙
+      </button>
+    </header>
+
+    <!-- Search & Filter -->
+    <div class="controls">
+      <input type="text" id="search" placeholder="🔍 Search addons..." />
+      <select id="filter-type">
+        <option value="all">All Addons</option>
+        <option value="free">Free</option>
+        <option value="paid">Paid</option>
+      </select>
+    </div>
+
+    <!-- Addon Grid -->
+    <main id="addon-grid" class="grid">
+      <!-- Addons loaded dynamically -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© 2025 Your App. All rights reserved.</p>
+      <p>Contact: <a href="mailto:you@example.com">you@example.com</a></p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

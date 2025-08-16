@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🔐 Admin - Addon Upload</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .admin-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      border-radius: 12px;
+    }
+    .btn-upload {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .btn-upload:hover {
+      background: #218838;
+    }
+    .status {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 12px;
+      display: none;
+    }
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      display: block;
+    }
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      display: block;
+    }
+    .preview {
+      display: flex; gap: 1rem; margin: 1rem 0; flex-wrap: wrap;
+    }
+    .preview img {
+      width: 100px; height: 60px; object-fit: cover; border-radius: 8px;
+    }
+  </style>
+</head>
+<body class="light">
+  <div class="container">
+    <header class="header">
+      <h1>🔐 Admin Dashboard</h1>
+      <p>Upload and manage your addons easily</p>
+      <button id="theme-toggle" class="btn-icon">🌙</button>
+    </header>
+
+    <main class="admin-container">
+      <form id="addon-form">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="name" required />
+        </div>
+
+        <div class="form-group">
+          <label>Type</label>
+          <select id="type" required>
+            <option value="free">Free</option>
+            <option value="paid">Paid</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Version</label>
+          <input type="text" id="version" value="1.0" required />
+        </div>
+
+        <div class="form-group">
+          <label>Author</label>
+          <input type="text" id="author" value="You" required />
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="description" rows="3" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Icon (PNG, 280x160 recommended)</label>
+          <input type="file" id="icon" accept="image/png, image/jpeg" required />
+          <div class="preview" id="icon-preview"></div>
+        </div>
+
+        <div class="form-group">
+          <label>Addon File (.zip)</label>
+          <input type="file" id="file" accept=".zip" required />
+        </div>
+
+        <button type="submit" class="btn-upload">📤 Upload Addon</button>
+      </form>
+
+      <div id="status" class="status"></div>
+    </main>
+  </div>
+
+  <script>
+    // Theme Toggle
+    const themeToggle = document.getElementById("theme-toggle");
+    const body = document.body;
+    const savedTheme = localStorage.getItem("theme") || "light";
+    body.className = savedTheme;
+    themeToggle.textContent = savedTheme === "dark" ? "☀️" : "🌙";
+
+    themeToggle.addEventListener("click", () => {
+      const isDark = body.className === "dark";
+      body.className = isDark ? "light" : "dark";
+      localStorage.setItem("theme", isDark ? "light" : "dark");
+      themeToggle.textContent = isDark ? "🌙" : "☀️";
+    });
+
+    // Preview icon
+    document.getElementById("icon").addEventListener("change", (e) => {
+      const preview = document.getElementById("icon-preview");
+      preview.innerHTML = "";
+      if (e.target.files[0]) {
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(e.target.files[0]);
+        preview.appendChild(img);
+      }
+    });
+
+    
+    // Simple password protection
+    const ADMIN_PASSWORD = "addonsuploadpage@soms"; // ← CHANGE THIS
+    if (!sessionStorage.loggedIn) {
+    const pass = prompt("Enter admin password:");
+    if (pass !== ADMIN_PASSWORD) {
+        alert("Access denied.");
+        window.location.href = "index.html";
+    } else {
+        sessionStorage.loggedIn = "true";
+    }
+    }
+
+    // Form submission
+    document.getElementById("addon-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const status = document.getElementById("status");
+      status.className = "status";
+
+      try {
+        const name = document.getElementById("name").value.trim();
+        const type = document.getElementById("type").value;
+        const version = document.getElementById("version").value;
+        const author = document.getElementById("author").value;
+        const description = document.getElementById("description").value;
+        const iconFile = document.getElementById("icon").files[0];
+        const addonFile = document.getElementById("file").files[0];
+
+        if (!name || !description || !iconFile || !addonFile) {
+          throw new Error("All fields are required.");
+        }
+
+        // Your GitHub settings
+        const owner = "scleragames"; // ← CHANGE THIS
+        const repo = "SOMS-Addons-Store";       // ← CHANGE THIS
+        const token = "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";     // ← CHANGE THIS (from step 1)
+
+        const headers = {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        };
+
+        // Generate safe ID
+        const id = name.toLowerCase().replace(/[^a-z0-9]/g, "-");
+
+        // Upload icon
+        const iconPath = `icons/${type}/${id}.png`;
+        const iconData = await iconFile.arrayBuffer();
+        const iconBase64 = btoa(String.fromCharCode(...new Uint8Array(iconData)));
+
+        await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${iconPath}`, {
+          method: "PUT",
+          headers,
+          body: JSON.stringify({
+            message: `Upload icon: ${name}`,
+            content: iconBase64
+          })
+        });
+
+        // Upload addon file
+        if (type === "free") {
+          const addonPath = `addons/${type}/${id}.zip`;
+          const addonData = await addonFile.arrayBuffer();
+          const addonBase64 = btoa(String.fromCharCode(...new Uint8Array(addonData)));
+
+          await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${addonPath}`, {
+            method: "PUT",
+            headers,
+            body: JSON.stringify({
+              message: `Upload addon: ${name}`,
+              content: addonBase64
+            })
+          });
+        }
+
+        // Update addons.json
+        const jsonRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/addons.json`);
+        const jsonData = await jsonRes.json();
+        const currentAddons = JSON.parse(atob(jsonData.content));
+
+        const exists = currentAddons.some(a => a.id === id);
+        if (exists) {
+          throw new Error("Addon with this name already exists.");
+        }
+
+        const newAddon = {
+          id,
+          name,
+          type,
+          icon: iconPath,
+          ...(type === "free" && { file: `addons/${type}/${id}.zip` }),
+          description,
+          version,
+          author
+        };
+
+        currentAddons.push(newAddon);
+
+        await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/addons.json`, {
+          method: "PUT",
+          headers,
+          body: JSON.stringify({
+            message: `Add new addon: ${name}`,
+            content: btoa(JSON.stringify(currentAddons, null, 2)),
+            sha: jsonData.sha
+          })
+        });
+
+        status.className = "status success";
+        status.textContent = `✅ Success! "${name}" has been uploaded.`;
+        document.getElementById("addon-form").reset();
+        document.getElementById("icon-preview").innerHTML = "";
+
+      } catch (err) {
+        console.error(err);
+        status.className = "status error";
+        status.innerHTML = `❌ Error: ${err.message || "Upload failed. Check console."}`;
+      }
+    });
+  </script>
+</body>
+</html>
