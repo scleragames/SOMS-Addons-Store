@@ -68,9 +68,39 @@
     .preview img {
       width: 100px; height: 60px; object-fit: cover; border-radius: 8px;
     }
+    .lock-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font);
+      z-index: 9999;
+    }
+    .lock-overlay input {
+      margin: 1rem 0;
+      padding: 0.8rem;
+      width: 80%;
+      max-width: 300px;
+      border: none;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 1.1rem;
+    }
   </style>
 </head>
 <body class="light">
+  <!-- Password Prompt Overlay -->
+  <div id="lock-screen" class="lock-overlay">
+    <h2>🔐 Admin Access</h2>
+    <p>Enter your password to continue</p>
+    <input type="password" id="admin-pass" placeholder="Password" />
+    <button onclick="checkPassword()" style="padding: 0.7rem 1.5rem; background: #0078d4; color: white; border: none; border-radius: 12px; cursor: pointer;">Login</button>
+  </div>
+
   <div class="container">
     <header class="header">
       <h1>🔐 Admin Dashboard</h1>
@@ -127,7 +157,56 @@
   </div>
 
   <script>
-    // Theme Toggle
+    // === CONFIGURATION ===
+    const GITHUB = {
+      owner: "scleragames",     // ← CHANGE ME
+      repo:  "SOMS-Addons-Store",          // ← CHANGE ME
+      token: "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" // ← CHANGE ME (keep private!)
+    };
+
+    const ADMIN_PASSWORD = "addonsuploadpage@soms";  // ← CHANGE THIS TO YOUR PASSWORD
+
+    // === HELPERS ===
+    function utf8ToBase64(str) {
+      try {
+        return btoa(unescape(encodeURIComponent(str)));
+      } catch (e) {
+        console.error("Encoding failed:", e);
+        throw new Error("Invalid characters in input (emojis/symbols may be corrupted)");
+      }
+    }
+
+    function sanitize(str) {
+      return str
+        .replace(/[\uD800-\uDFFF]/g, '')  // Remove broken surrogate pairs
+        .replace(/[^\x00-\x7F]/g, c => {
+          // Normalize common Unicode punctuation
+          if (['—', '–'].includes(c)) return '-';
+          if (['“', '”'].includes(c)) return '"';
+          if (['‘', '’'].includes(c)) return "'";
+          if (c === '❤️' || c === '♥') return '❤';
+          return c; // Keep others like 🌟 if possible
+        });
+    }
+
+    // === PASSWORD PROTECTION ===
+    function checkPassword() {
+      const pass = document.getElementById("addonsuploadpage@soms").value;
+      if (pass === ADMIN_PASSWORD) {
+        document.getElementById("lock-screen").style.display = "none";
+        sessionStorage.setItem("loggedIn", "true");
+      } else {
+        alert("❌ Incorrect password!");
+      }
+    }
+
+    if (sessionStorage.getItem("loggedIn") !== "true") {
+      document.getElementById("lock-screen").style.display = "flex";
+    } else {
+      document.getElementById("lock-screen").style.display = "none";
+    }
+
+    // === THEME TOGGLE ===
     const themeToggle = document.getElementById("theme-toggle");
     const body = document.body;
     const savedTheme = localStorage.getItem("theme") || "light";
@@ -141,7 +220,7 @@
       themeToggle.textContent = isDark ? "🌙" : "☀️";
     });
 
-    // Preview icon
+    // === ICON PREVIEW ===
     document.getElementById("icon").addEventListener("change", (e) => {
       const preview = document.getElementById("icon-preview");
       preview.innerHTML = "";
@@ -152,31 +231,18 @@
       }
     });
 
-    
-    // Simple password protection
-    const ADMIN_PASSWORD = "addonsuploadpage@soms"; // ← CHANGE THIS
-    if (!sessionStorage.loggedIn) {
-    const pass = prompt("Enter admin password:");
-    if (pass !== ADMIN_PASSWORD) {
-        alert("Access denied.");
-        window.location.href = "index.html";
-    } else {
-        sessionStorage.loggedIn = "true";
-    }
-    }
-
-    // Form submission
+    // === FORM SUBMISSION ===
     document.getElementById("addon-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const status = document.getElementById("status");
       status.className = "status";
 
       try {
-        const name = document.getElementById("name").value.trim();
+        const name = sanitize(document.getElementById("name").value.trim());
         const type = document.getElementById("type").value;
-        const version = document.getElementById("version").value;
-        const author = document.getElementById("author").value;
-        const description = document.getElementById("description").value;
+        const version = sanitize(document.getElementById("version").value);
+        const author = sanitize(document.getElementById("author").value);
+        const description = sanitize(document.getElementById("description").value);
         const iconFile = document.getElementById("icon").files[0];
         const addonFile = document.getElementById("file").files[0];
 
@@ -184,20 +250,16 @@
           throw new Error("All fields are required.");
         }
 
-        // Your GitHub settings
-        const owner = "scleragames"; // ← CHANGE THIS
-        const repo = "SOMS-Addons-Store";       // ← CHANGE THIS
-        const token = "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";     // ← CHANGE THIS (from step 1)
-
+        const { owner, repo, token } = GITHUB;
         const headers = {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
         };
 
         // Generate safe ID
-        const id = name.toLowerCase().replace(/[^a-z0-9]/g, "-");
+        const id = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 
-        // Upload icon
+        // === UPLOAD ICON ===
         const iconPath = `icons/${type}/${id}.png`;
         const iconData = await iconFile.arrayBuffer();
         const iconBase64 = btoa(String.fromCharCode(...new Uint8Array(iconData)));
@@ -211,7 +273,8 @@
           })
         });
 
-        // Upload addon file
+        // === UPLOAD ADDON FILE (if free) ===
+        let fileEntry = {};
         if (type === "free") {
           const addonPath = `addons/${type}/${id}.zip`;
           const addonData = await addonFile.arrayBuffer();
@@ -225,16 +288,16 @@
               content: addonBase64
             })
           });
+          fileEntry.file = addonPath;
         }
 
-        // Update addons.json
+        // === UPDATE addons.json ===
         const jsonRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/addons.json`);
         const jsonData = await jsonRes.json();
         const currentAddons = JSON.parse(atob(jsonData.content));
 
-        const exists = currentAddons.some(a => a.id === id);
-        if (exists) {
-          throw new Error("Addon with this name already exists.");
+        if (currentAddons.some(a => a.id === id)) {
+          throw new Error(`Addon ID "${id}" already exists. Try a different name.`);
         }
 
         const newAddon = {
@@ -242,33 +305,39 @@
           name,
           type,
           icon: iconPath,
-          ...(type === "free" && { file: `addons/${type}/${id}.zip` }),
           description,
           version,
-          author
+          author,
+          ...fileEntry
         };
 
         currentAddons.push(newAddon);
+
+        const updatedJson = JSON.stringify(currentAddons, null, 2);
+        const jsonBase64 = utf8ToBase64(updatedJson); // ✅ UTF-8 Safe
 
         await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/addons.json`, {
           method: "PUT",
           headers,
           body: JSON.stringify({
             message: `Add new addon: ${name}`,
-            content: btoa(JSON.stringify(currentAddons, null, 2)),
+            content: jsonBase64,
             sha: jsonData.sha
           })
         });
 
+        // === SUCCESS ===
         status.className = "status success";
-        status.textContent = `✅ Success! "${name}" has been uploaded.`;
+        status.textContent = `✅ Success! "${name}" has been uploaded and will appear on the store.`;
+
+        // Reset form
         document.getElementById("addon-form").reset();
         document.getElementById("icon-preview").innerHTML = "";
 
       } catch (err) {
-        console.error(err);
+        console.error("Upload failed:", err);
         status.className = "status error";
-        status.innerHTML = `❌ Error: ${err.message || "Upload failed. Check console."}`;
+        status.textContent = `❌ Error: ${err.message || "Upload failed. Check console."}`;
       }
     });
   </script>
