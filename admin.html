@@ -191,7 +191,7 @@
 
     // === PASSWORD PROTECTION ===
     function checkPassword() {
-      const pass = document.getElementById("addonsuploadpage@soms").value;
+      const pass = document.getElementById("admin-pass").value;
       if (pass === ADMIN_PASSWORD) {
         document.getElementById("lock-screen").style.display = "none";
         sessionStorage.setItem("loggedIn", "true");
@@ -343,4 +343,5 @@
   </script>
 </body>
 </html>
+
 
