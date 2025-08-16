@@ -1,0 +1,31 @@
+[
+  {
+    "id": "addon1",
+    "name": "Smooth Scroll Enhancer",
+    "type": "free",
+    "icon": "icons/free/addon1.png",
+    "description": "Adds buttery-smooth scrolling to your app.",
+    "file": "addons/free/addon1.zip",
+    "version": "1.2",
+    "author": "DevTeam"
+  },
+  {
+    "id": "addon2",
+    "name": "Dark Mode Pack",
+    "type": "paid",
+    "icon": "icons/paid/addon2.png",
+    "description": "Complete dark UI overhaul with animations.",
+    "version": "2.0",
+    "author": "DevTeam"
+  },
+  {
+    "id": "addon3",
+    "name": "AI Assistant",
+    "type": "free",
+    "icon": "icons/free/addon3.png",
+    "description": "Integrates AI-powered help into your app.",
+    "file": "addons/free/addon3.zip",
+    "version": "1.5",
+    "author": "OpenAI Fan"
+  }
+]
