@@ -8,24 +8,5 @@
     "file": "addons/free/better_export.addon",
     "version": "1.0",
     "author": "Sclera Games"
-  },
-  {
-    "id": "addon2",
-    "name": "Dark Mode Pack",
-    "type": "paid",
-    "icon": "icons/paid/addon2.png",
-    "description": "Complete dark UI overhaul with animations.",
-    "version": "2.0",
-    "author": "DevTeam"
-  },
-  {
-    "id": "addon3",
-    "name": "AI Assistant",
-    "type": "free",
-    "icon": "icons/free/addon3.png",
-    "description": "Integrates AI-powered help into your app.",
-    "file": "addons/free/addon3.zip",
-    "version": "1.5",
-    "author": "OpenAI Fan"
   }
 ]
