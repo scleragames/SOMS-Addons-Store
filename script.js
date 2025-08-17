@@ -1,7 +1,3 @@
-/**
- * Addon Store Script
- * Ensures icons are always square, even with missing images.
- */
 document.addEventListener("DOMContentLoaded", () => {
   const themeToggle = document.getElementById("theme-toggle");
   const searchInput = document.getElementById("search");
@@ -79,9 +75,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const imgContainer = document.createElement("div");
     imgContainer.className = "card-img-container";
 
-    const iconSrc = addon.icon?.trim() || "";
+    const iconSrc = addon.icon?.trim();
 
-    if (iconSrc && !iconSrc.startsWith("http")) {
+    // If valid URL, load image
+    if (iconSrc && iconSrc !== "#" && !iconSrc.startsWith("http")) {
       console.warn(`Invalid URL: ${iconSrc}`);
     }
 
