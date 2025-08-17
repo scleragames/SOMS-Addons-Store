@@ -2,44 +2,75 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Addon Store</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Favicon (optional) -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body class="light">
-  <div class="container">
+  <div class="container" role="main">
+
     <!-- Header -->
     <header class="header">
       <h1>✨ Addon Store</h1>
-      <p>Browse and enhance your app experience</p>
-      <button id="theme-toggle" class="btn-icon" title="Toggle Theme">
+      <p class="subtitle">Browse and enhance your app experience</p>
+      <button 
+        id="theme-toggle" 
+        class="btn-icon" 
+        aria-label="Toggle dark mode" 
+        type="button"
+      >
         🌙
       </button>
     </header>
 
-    <!-- Search & Filter -->
-    <div class="controls">
-      <input type="text" id="search" placeholder="🔍 Search addons..." />
-      <select id="filter-type">
-        <option value="all">All Addons</option>
-        <option value="free">Free</option>
-        <option value="paid">Paid</option>
-      </select>
-    </div>
+    <!-- Search & Filter Controls -->
+    <section class="controls" aria-label="Filter and search addons">
+      <div class="control-group">
+        <label for="search" class="visually-hidden">Search addons</label>
+        <input 
+          type="text" 
+          id="search" 
+          class="search-input" 
+          placeholder="🔍 Search by name or description..." 
+          aria-controls="addon-grid"
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="control-group">
+        <label for="filter-type" class="visually-hidden">Filter by type</label>
+        <select id="filter-type" class="filter-select" aria-controls="addon-grid">
+          <option value="all">All Addons</option>
+          <option value="free">Free</option>
+          <option value="paid">Paid</option>
+        </select>
+      </div>
+    </section>
 
     <!-- Addon Grid -->
-    <main id="addon-grid" class="grid">
-      <!-- Addons loaded dynamically -->
+    <main id="addon-grid" class="grid" role="list" aria-label="Addon list">
+      <!-- Addons will be loaded dynamically via JavaScript -->
+      <!-- Skeleton loading state will be injected on first load -->
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
       <p>© 2025 Your App. All rights reserved.</p>
       <p>Contact: <a href="mailto:you@example.com">you@example.com</a></p>
     </footer>
+
   </div>
 
+  <!-- JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>
