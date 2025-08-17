@@ -84,45 +84,81 @@ document.addEventListener("DOMContentLoaded", () => {
     card.className = "card";
     card.setAttribute("role", "article");
     card.setAttribute("aria-label", `${addon.name}, ${addon.type} addon by ${addon.author}`);
-
+  
+    const imgContainer = document.createElement("div");
+    imgContainer.className = "card-img-container";
+  
     const img = new Image();
-    img.src = addon.icon;
-    img.alt = addon.name;
-    img.loading = "lazy"; // Lazy load images
-    img.onerror = () => { img.src = CONFIG.imagePlaceholder; };
-
-    const downloadLink = addon.type === "free"
-      ? `<a href="${addon.file}" class="btn" download aria-label="Download ${addon.name} v${addon.version}">
-           Download
-         </a>`
-      : `<button class="btn btn-outline" aria-label="Contact to purchase ${addon.name}">
-           Contact Me
-         </button>`;
-
-    card.innerHTML = `
-      <div class="card-img-container">${img.outerHTML}</div>
-      <div class="card-body">
-        <h3>${addon.name}</h3>
-        <p>${addon.description}</p>
-        <div class="card-meta">
-          <span class="tag tag-${addon.type}">${addon.type.toUpperCase()}</span>
-          <span>v${addon.version}</span>
-        </div>
-        <div class="card-meta">
-          <small>by ${addon.author}</small>
-        </div>
-        ${downloadLink}
-      </div>
-    `;
-
-    // Add interaction for paid addons
-    if (addon.type === "paid") {
-      const btn = card.querySelector(".btn");
-      btn.addEventListener("click", () => {
-        alert(`📩 Please contact me at: ${CONFIG.contactEmail} to purchase "${addon.name}".`);
-      });
+    const iconSrc = addon.icon && addon.icon.trim() !== "" ? addon.icon : null;
+  
+    if (iconSrc) {
+      img.src = iconSrc;
+    } else {
+      img.src = CONFIG.imagePlaceholder; // Fallback to placeholder
     }
-
+    img.alt = addon.name || "Addon";
+  
+    // Always apply classes and attributes
+    img.loading = "lazy";
+    img.className = "card-img";
+  
+    // If image fails, re-assign to fallback (ensures visual consistency)
+    img.onerror = () => {
+      img.src = CONFIG.imagePlaceholder;
+      img.classList.add("broken");
+    };
+  
+    imgContainer.appendChild(img);
+  
+    const body = document.createElement("div");
+    body.className = "card-body";
+  
+    const title = document.createElement("h3");
+    title.textContent = addon.name || "Unnamed Addon";
+  
+    const desc = document.createElement("p");
+    desc.textContent = addon.description || "No description available.";
+  
+    const meta1 = document.createElement("div");
+    meta1.className = "card-meta";
+  
+    const typeTag = document.createElement("span");
+    typeTag.className = `tag tag-${addon.type}`;
+    typeTag.textContent = addon.type?.toUpperCase() || "FREE";
+  
+    const version = document.createElement("span");
+    version.textContent = `v${addon.version || "1.0"}`;
+    meta1.append(typeTag, version);
+  
+    const meta2 = document.createElement("div");
+    meta2.className = "card-meta";
+    const author = document.createElement("small");
+    author.textContent = `by ${addon.author || "Unknown"}`;
+    meta2.appendChild(author);
+  
+    const action = document.createElement("div");
+  
+    if (addon.type === "free" && addon.file) {
+      const link = document.createElement("a");
+      link.href = addon.file;
+      link.className = "btn";
+      link.download = true;
+      link.textContent = "Download";
+      link.setAttribute("aria-label", `Download ${title.textContent}`);
+      action.appendChild(link);
+    } else {
+      const btn = document.createElement("button");
+      btn.className = "btn btn-outline";
+      btn.textContent = "Contact Me";
+      btn.addEventListener("click", () => {
+        alert(`📩 Please contact me at: ${CONFIG.contactEmail} to purchase "${title.textContent}".`);
+      });
+      action.appendChild(btn);
+    }
+  
+    body.append(title, desc, meta1, meta2, action);
+    card.append(imgContainer, body);
+  
     return card;
   }
 
@@ -218,3 +254,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
