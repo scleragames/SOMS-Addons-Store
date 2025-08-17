@@ -13,7 +13,7 @@
     "id": "addon2",
     "name": "Better Export V2",
     "type": "free",
-    "icon": "icons/free/better_export_V2.png",
+    "icon": "icons/free/better_export.png",
     "description": "a more better version of better export for soms.",
     "file": "addons/free/better_export_v2.addon",
     "version": "1.0",
