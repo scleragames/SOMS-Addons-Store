@@ -1,5 +1,6 @@
 /**
- * Addon Manager - Enhanced with better UX, performance & structure
+ * Addon Store Manager
+ * Ensures consistent square icon containers, even when icons are missing.
  */
 document.addEventListener("DOMContentLoaded", () => {
   // DOM Elements
@@ -10,45 +11,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Configuration
   const CONFIG = {
-    contactEmail: "you@example.com", // Easy to change
+    contactEmail: "scleragames@gmail.com", // Easy to customize
     jsonUrl: "addons.json",
-    imagePlaceholder: "https://via.placeholder.com/280x160?text=No+Image",
     debounceDelay: 300, // ms
   };
 
   // State
   let addons = [];
-  let filteredAddons = [];
-  let isLoaded = false;
 
   // --------------------------
-  // Theme Management
+  // 🌙 Theme Management
   // --------------------------
   const Theme = {
-    current: () => localStorage.getItem("theme") || "light",
-    apply: (theme) => {
-      document.body.classList.remove("light", "dark");
-      document.body.classList.add(theme);
+    get: () => localStorage.getItem("theme") || "light",
+    set: (theme) => {
+      document.documentElement.setAttribute("data-theme", theme);
       localStorage.setItem("theme", theme);
+      updateToggleIcon(theme);
     },
     toggle: () => {
-      const newTheme = Theme.current() === "dark" ? "light" : "dark";
-      Theme.apply(newTheme);
-      updateThemeToggleIcon(newTheme);
+      const current = Theme.get();
+      Theme.set(current === "dark" ? "light" : "dark");
     },
   };
 
-  function updateThemeToggleIcon(theme) {
+  function updateToggleIcon(theme) {
     themeToggle.textContent = theme === "dark" ? "☀️" : "🌙";
     themeToggle.setAttribute("aria-label", `Switch to ${theme === "dark" ? "light" : "dark"} mode`);
   }
 
+  // Apply saved theme
+  const savedTheme = Theme.get();
+  document.documentElement.setAttribute("data-theme", savedTheme);
+  updateToggleIcon(savedTheme);
+
   themeToggle.addEventListener("click", Theme.toggle);
-  Theme.apply(Theme.current()); // Apply saved theme
-  updateThemeToggleIcon(Theme.current());
 
   // --------------------------
-  // Loading & Error UI
+  // 🧱 UI State Management
   // --------------------------
   function showLoading() {
     addonGrid.innerHTML = "";
@@ -56,12 +56,18 @@ document.addEventListener("DOMContentLoaded", () => {
       const skeleton = document.createElement("div");
       skeleton.className = "card card-skeleton";
       skeleton.innerHTML = `
-        <div class="card-skeleton-img"></div>
+        <div class="card-img-container"></div>
         <div class="card-body">
-          <h3 class="card-skeleton-title"></h3>
-          <p class="card-skeleton-text"></p>
-          <p class="card-skeleton-text short"></p>
-          <button class="btn btn-skeleton" disabled></button>
+          <h3 class="skeleton-title"></h3>
+          <p class="skeleton-text"></p>
+          <div class="card-meta">
+            <span class="skeleton-tag"></span>
+            <span class="skeleton-version"></span>
+          </div>
+          <div class="card-meta">
+            <small class="skeleton-author"></small>
+          </div>
+          <div class="skeleton-btn"></div>
         </div>
       `;
       addonGrid.appendChild(skeleton);
@@ -72,77 +78,81 @@ document.addEventListener("DOMContentLoaded", () => {
     addonGrid.innerHTML = `<p class="error-message" role="alert">${message}</p>`;
   }
 
-  function showEmptyState() {
+  function showEmpty() {
     addonGrid.innerHTML = `<p class="empty-state">No addons match your search.</p>`;
   }
 
   // --------------------------
-  // Addon Display
+  // 🖼️ Create Addon Card (Always Square Icon)
   // --------------------------
   function createAddonCard(addon) {
     const card = document.createElement("div");
     card.className = "card";
     card.setAttribute("role", "article");
-    card.setAttribute("aria-label", `${addon.name}, ${addon.type} addon by ${addon.author}`);
-  
+    card.setAttribute("aria-label", `${addon.name} – ${addon.type} addon by ${addon.author}`);
+
+    // --- Image Container (Always Square) ---
     const imgContainer = document.createElement("div");
     imgContainer.className = "card-img-container";
-  
-    const img = new Image();
-    const iconSrc = addon.icon && addon.icon.trim() !== "" ? addon.icon : null;
-  
-    if (iconSrc) {
-      img.src = iconSrc;
-    } else {
-      img.src = CONFIG.imagePlaceholder; // Fallback to placeholder
+
+    const iconSrc = (addon.icon || "").trim();
+
+    if (iconSrc && !iconSrc.startsWith("http") && !iconSrc.startsWith("/")) {
+      console.warn(`Invalid icon URL: ${iconSrc}`);
     }
-    img.alt = addon.name || "Addon";
-  
-    // Always apply classes and attributes
-    img.loading = "lazy";
-    img.className = "card-img";
-  
-    // If image fails, re-assign to fallback (ensures visual consistency)
-    img.onerror = () => {
-      img.src = CONFIG.imagePlaceholder;
-      img.classList.add("broken");
-    };
-  
-    imgContainer.appendChild(img);
-  
+
+    if (iconSrc && iconSrc !== "#") {
+      const img = new Image();
+      img.src = iconSrc;
+      img.alt = addon.name;
+      img.loading = "lazy";
+      img.onerror = () => {
+        imgContainer.innerHTML = "";
+        imgContainer.textContent = "No Icon";
+      };
+      imgContainer.appendChild(img);
+    } else {
+      imgContainer.textContent = "No Icon"; // Fallback text
+    }
+
+    // --- Card Body ---
     const body = document.createElement("div");
     body.className = "card-body";
-  
+
     const title = document.createElement("h3");
     title.textContent = addon.name || "Unnamed Addon";
-  
+
     const desc = document.createElement("p");
     desc.textContent = addon.description || "No description available.";
-  
+
+    // Metadata row 1: Type & Version
     const meta1 = document.createElement("div");
     meta1.className = "card-meta";
-  
+
     const typeTag = document.createElement("span");
     typeTag.className = `tag tag-${addon.type}`;
-    typeTag.textContent = addon.type?.toUpperCase() || "FREE";
-  
+    typeTag.textContent = (addon.type || "free").toUpperCase();
+
     const version = document.createElement("span");
     version.textContent = `v${addon.version || "1.0"}`;
+
     meta1.append(typeTag, version);
-  
+
+    // Metadata row 2: Author
     const meta2 = document.createElement("div");
     meta2.className = "card-meta";
     const author = document.createElement("small");
     author.textContent = `by ${addon.author || "Unknown"}`;
     meta2.appendChild(author);
-  
+
+    // Action Button
     const action = document.createElement("div");
-  
-    if (addon.type === "free" && addon.file) {
+
+    if (addon.type === "free" && addon.file && addon.file !== "#") {
       const link = document.createElement("a");
       link.href = addon.file;
       link.className = "btn";
-      link.download = true;
+      link.setAttribute("download", "");
       link.textContent = "Download";
       link.setAttribute("aria-label", `Download ${title.textContent}`);
       action.appendChild(link);
@@ -155,103 +165,112 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       action.appendChild(btn);
     }
-  
+
+    // Assemble body
     body.append(title, desc, meta1, meta2, action);
+
+    // Assemble card
     card.append(imgContainer, body);
-  
+
     return card;
   }
 
-  function displayAddons(addonsList) {
+  // --------------------------
+  // 📦 Render Addons Safely
+  // --------------------------
+  function renderAddons(addonList) {
     addonGrid.innerHTML = "";
-    if (addonsList.length === 0) {
-      showEmptyState();
+
+    if (!addonList || addonList.length === 0) {
+      showEmpty();
       return;
     }
 
-    addonsList.forEach(addon => {
-      addonGrid.appendChild(createAddonCard(addon));
+    const fragment = document.createDocumentFragment();
+    addonList.forEach(addon => fragment.appendChild(createAddonCard(addon)));
+    
+    requestAnimationFrame(() => {
+      addonGrid.appendChild(fragment);
     });
-    isLoaded = true;
   }
 
   // --------------------------
-  // Search & Filter Logic
+  // 🔍 Search & Filter (Debounced)
   // --------------------------
   function filterAddons() {
     const query = searchInput.value.trim().toLowerCase();
     const type = filterSelect.value;
 
-    filteredAddons = addons.filter(addon => {
-      const matchesSearch = 
-        addon.name.toLowerCase().includes(query) ||
-        addon.description.toLowerCase().includes(query);
+    const results = addons.filter(addon => {
+      const matchesSearch =
+        (addon.name || "").toLowerCase().includes(query) ||
+        (addon.description || "").toLowerCase().includes(query);
       const matchesType = type === "all" || addon.type === type;
       return matchesSearch && matchesType;
     });
 
-    displayAddons(filteredAddons);
+    renderAddons(results);
   }
 
-  // Debounce function to limit filter calls
-  function debounce(func, delay) {
-    let timeoutId;
+  const debouncedFilter = ((func, delay) => {
+    let timer;
     return (...args) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func.apply(this, args), delay);
+      clearTimeout(timer);
+      timer = setTimeout(() => func.apply(this, args), delay);
     };
-  }
-
-  const debouncedFilter = debounce(filterAddons, CONFIG.debounceDelay);
+  })(filterAddons, CONFIG.debounceDelay);
 
   searchInput.addEventListener("input", debouncedFilter);
   filterSelect.addEventListener("change", filterAddons);
 
+  // Optional: Trigger filter on Enter
+  [searchInput, filterSelect].forEach(input => {
+    input.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        filterAddons();
+      }
+    });
+  });
+
   // --------------------------
-  // Load Addons
+  // 🌐 Load Addons
   // --------------------------
   async function loadAddons() {
     showLoading();
 
     try {
-      const res = await fetch(CONFIG.jsonUrl, { cache: "no-cache" });
+      const res = await fetch(`${CONFIG.jsonUrl}?t=${Date.now()}`, {
+        method: "GET",
+        cache: "no-store",
+      });
+
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      addons = await res.json();
+      const data = await res.json();
 
-      // Validate data shape
-      if (!Array.isArray(addons)) throw new Error("Invalid data format");
+      if (!Array.isArray(data)) {
+        throw new Error("Invalid JSON format: expected array of addons.");
+      }
 
-      // Set default values for missing fields
-      addons = addons.map(addon => ({
-        name: addon.name || "Unnamed Addon",
-        description: addon.description || "No description available.",
-        type: addon.type === "free" || addon.type === "paid" ? addon.type : "free",
-        version: addon.version || "1.0",
-        author: addon.author || "Unknown",
-        file: addon.file || "#",
-        icon: addon.icon || CONFIG.imagePlaceholder,
+      // Normalize data with defaults
+      addons = data.map(item => ({
+        name: item.name?.trim() || "Unnamed Addon",
+        description: item.description?.trim() || "No description available.",
+        type: item.type === "paid" ? "paid" : "free",
+        version: item.version?.trim() || "1.0",
+        author: item.author?.trim() || "Unknown",
+        file: item.file?.trim() || (item.type === "free" ? "#" : ""),
+        icon: item.icon?.trim() || "",
       }));
 
-      filteredAddons = [...addons];
-      filterAddons(); // Initial display
+      filterAddons(); // Initial render
     } catch (err) {
-      console.error("Failed to load or parse addons:", err);
-      showError("❌ Failed to load addons. Please check your connection or try again later.");
+      console.error("Addon load failed:", err);
+      showError("❌ Failed to load addons. Please check your connection and try again.");
     }
   }
 
   // --------------------------
-  // Initialize
+  // ✅ Initialize
   // --------------------------
   loadAddons();
-
-  // Optional: Add keyboard support for filter controls
-  [searchInput, filterSelect].forEach(el => {
-    el.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        filterAddons(); // Trigger filter on Enter
-      }
-    });
-  });
 });
-
