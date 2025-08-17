@@ -124,52 +124,31 @@ body {
   gap: 1.5rem;
 }
 
-/* Card */
-.card {
-  background: var(--card-bg);
+/* Icon Card – Square */
+.icon-card {
+  width: 100%;
+  height: var(--icon-size);
+  background: #f0f0f0;
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
-  transition: var(--transition);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-}
-
-/* Image Container – Always Square */
-.card-img-container {
-  width: 100%;
-  height: var(--icon-size); /* Fixed square */
-  background: #f0f0f0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #999;
-  font-size: 14px;
-  font-weight: 500;
-  text-align: center;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  overflow: hidden;
+  margin-bottom: 0.5rem;
+  transition: var(--transition);
 }
 
-.card-img-container img {
+.icon-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
   display: block;
-  transition: opacity 0.3s ease;
 }
 
-/* Fallback Text Only When No Image */
-.card-img-container:not(:has(img[src]))::before {
+.icon-card:not(:has(img[src]))::before {
   content: "No Icon";
   position: absolute;
   inset: 0;
@@ -182,45 +161,51 @@ body {
   pointer-events: none;
 }
 
-.card-img-container > img[src] {
+.icon-card > img[src] {
   opacity: 1;
 }
 
-.card-img-container > img[src=""] {
+.icon-card > img[src=""] {
   opacity: 0;
 }
 
-/* Content Area – Full Width Below Image */
-.card-body {
+/* Info Card – Below Icon */
+.info-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
   padding: 1rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  transition: var(--transition);
 }
 
-.card h3 {
+.info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.info-card h3 {
   font-size: 1.15rem;
   font-weight: 600;
-  margin: 0;
+  margin: 0 0 0.5rem 0;
   line-height: 1.3;
 }
 
-.card p {
+.info-card p {
   color: var(--text-secondary);
   font-size: 0.9rem;
-  margin: 0;
-  flex: 1;
+  margin: 0 0 0.75rem 0;
 }
 
-.card-meta {
+.info-card .card-meta {
   display: flex;
   justify-content: space-between;
   font-size: 0.8rem;
   color: var(--text-secondary);
+  margin-bottom: 0.75rem;
 }
 
-.tag {
+.info-card .tag {
   padding: 0.25rem 0.5rem;
   border-radius: 6px;
   font-weight: 600;
@@ -228,21 +213,21 @@ body {
   font-size: 0.75rem;
 }
 
-.tag-free {
+.info-card .tag-free {
   background: #d4edda;
   color: #155724;
 }
 
-.tag-paid {
+.info-card .tag-paid {
   background: #f8d7da;
   color: #721c24;
 }
 
-[data-theme="dark"] .tag-free { background: #2d6b40; color: #a8e0c0; }
-[data-theme="dark"] .tag-paid { background: #84262e; color: #f5a8aa; }
+[data-theme="dark"] .info-card .tag-free { background: #2d6b40; color: #a8e0c0; }
+[data-theme="dark"] .info-card .tag-paid { background: #84262e; color: #f5a8aa; }
 
 /* Buttons */
-.btn {
+.info-card .btn {
   display: inline-block;
   width: fit-content;
   padding: 0.75rem 1.25rem;
@@ -255,23 +240,22 @@ body {
   cursor: pointer;
   transition: var(--transition);
   text-align: center;
-  align-self: flex-start;
   margin-top: auto;
   text-decoration: none;
 }
 
-.btn:hover {
+.info-card .btn:hover {
   background: #4a6edb;
   transform: scale(1.04);
 }
 
-.btn-outline {
+.info-card .btn-outline {
   background: transparent;
   border: 2px solid var(--accent);
   color: var(--accent);
 }
 
-.btn-outline:hover {
+.info-card .btn-outline:hover {
   background: var(--accent);
   color: white;
 }
