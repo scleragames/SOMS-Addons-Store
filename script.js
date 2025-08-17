@@ -39,10 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
     addonGrid.innerHTML = "";
     for (let i = 0; i < 6; i++) {
       const skeleton = document.createElement("div");
-      skeleton.className = "card card-skeleton";
+      skeleton.className = "card-skeleton";
       skeleton.innerHTML = `
-        <div class="card-img-container"></div>
-        <div class="card-body">
+        <div class="icon-card"></div>
+        <div class="info-card">
           <h3 class="skeleton-title"></h3>
           <p class="skeleton-text"></p>
           <div class="card-meta">
@@ -67,18 +67,18 @@ document.addEventListener("DOMContentLoaded", () => {
     addonGrid.innerHTML = `<p class="empty-state">No addons match your search.</p>`;
   }
 
-  // Create Card Function
+  // Create Addon Card (Two-Box)
   function createAddonCard(addon) {
     const card = document.createElement("div");
-    card.className = "card";
+    card.className = "addon-item";
 
-    const imgContainer = document.createElement("div");
-    imgContainer.className = "card-img-container";
+    // Icon Card
+    const iconCard = document.createElement("div");
+    iconCard.className = "icon-card";
 
     const iconSrc = addon.icon?.trim();
 
-    // If valid URL, load image
-    if (iconSrc && iconSrc !== "#" && !iconSrc.startsWith("http")) {
+    if (iconSrc && !iconSrc.startsWith("http")) {
       console.warn(`Invalid URL: ${iconSrc}`);
     }
 
@@ -88,16 +88,17 @@ document.addEventListener("DOMContentLoaded", () => {
       img.alt = addon.name;
       img.loading = "lazy";
       img.onerror = () => {
-        imgContainer.innerHTML = "";
-        imgContainer.textContent = "No Icon";
+        iconCard.innerHTML = "";
+        iconCard.textContent = "No Icon";
       };
-      imgContainer.appendChild(img);
+      iconCard.appendChild(img);
     } else {
-      imgContainer.textContent = "No Icon"; // Fallback
+      iconCard.textContent = "No Icon"; // Fallback
     }
 
-    const body = document.createElement("div");
-    body.className = "card-body";
+    // Info Card
+    const infoCard = document.createElement("div");
+    infoCard.className = "info-card";
 
     const title = document.createElement("h3");
     title.textContent = addon.name || "Unnamed Addon";
@@ -142,8 +143,8 @@ document.addEventListener("DOMContentLoaded", () => {
       action.appendChild(btn);
     }
 
-    body.append(title, desc, meta1, meta2, action);
-    card.append(imgContainer, body);
+    infoCard.append(title, desc, meta1, meta2, action);
+    card.append(iconCard, infoCard);
 
     return card;
   }
