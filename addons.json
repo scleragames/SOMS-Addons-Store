@@ -1,0 +1,71 @@
+[
+  {
+    "id": "addon1",
+    "name": "Better Export",
+    "type": "free",
+    "icon": "icons/free/better_export.png",
+    "shortdescription": "Export beautiful, print-ready invoices in PDF with your logo and full styling.",
+    "longdescription": "Say goodbye to plain, unprofessional invoices. This addon transforms your order exports into sleek, A4-sized PDFs designed for printing or sharing. Includes your company logo, formatted customer details, a clean item table, and smart totals. You can save the invoice as a PDF or export it as a high-quality JPEG. Built for clarity and presentation — ideal for client handovers, records, or email attachments.",
+    "file": "addons/free/better_export.addon",
+    "version": "1.0",
+    "author": "Sclera Games",
+    "minAppVersion": "1.2.1",
+    "color": "#10A5D5",
+    "screenshots": [
+      "screenshots/Better Export/screenshot_1.png",
+      "screenshots/Better Export/screenshot_2.png"
+    ]
+  },
+  {
+    "id": "addon2",
+    "name": "Better Export V2",
+    "type": "premium",
+    "icon": "icons/paid/better_export_v2.png",
+    "shortdescription": "Advanced invoice export with PDF, JPEG, print options, and empty manual bills. ",
+    "longdescription": "Take full control of your invoice workflow. This upgraded export tool lets you print, save as PDF, or export as JPEG — all from one clean menu. It also introduces empty manual bills: generate a printable invoice template with blank rows, perfect for handwriting orders on-site. Whether you need a polished digital invoice or a physical form for field use, this addon delivers flexibility and professionalism in every document.",
+    "file": "",
+    "version": "1.0",
+    "author": "Sclera Games",
+    "minAppVersion": "1.2.1",
+    "color": "#D60C7B",
+    "screenshots": [
+      "screenshots/Better Export V2/screenshot_1.png",
+      "screenshots/Better Export V2/screenshot_2.png",
+      "screenshots/Better Export V2/screenshot_3.png"
+    ]
+  },
+  {
+    "id": "addon3",
+    "name": "QR Code on Orders",
+    "type": "premium",
+    "icon": "icons/paid/qr_code_button_in_order_history.png",
+    "shortdescription": "Add a Scan button to every order to instantly view a secure QR code with order details.",
+    "longdescription": "Easily verify and share order information with a simple scan. This addon adds a Scan button to each order in your list. Clicking it opens a clean, secure QR code popup containing key details like customer name, phone, total, and payment status — all digitally signed to prevent tampering. You can also embed your business logo into the QR code for a professional touch. Perfect for quick verification, customer handover, or offline access.",
+    "file": "",
+    "version": "1.0",
+    "author": "Sclera Games",
+    "minAppVersion": "1.2.1",
+    "color": "#67C2B9",
+    "screenshots": [
+      "screenshots/QR Code on Orders/screenshot_1.png",
+      "screenshots/QR Code on Orders/screenshot_2.png"
+    ]
+  },
+  {
+    "id": "addon4",
+    "name": "QR Code on Kaata",
+    "type": "premium",
+    "icon": "icons/paid/qr_code_on_kaata.png",
+    "shortdescription": "Generate secure, scannable QR codes for orders — great for delivery or customer verification. ",
+    "longdescription": "Instantly create tamper-proof QR codes for any order with just one click. Designed for real-world use, this addon lets you verify order authenticity on the spot — ideal for delivery staff, warehouse teams, or customer service. The QR code contains essential details like order ID, customer name, phone, total amount, and balance due, all protected with a digital signature. Optionally includes your logo for brand recognition. Fast, secure, and reliable.",
+    "file": "",
+    "version": "1.0",
+    "author": "Sclera Games",
+    "minAppVersion": "1.2.1",
+    "color": "#2061DF",
+    "screenshots": [
+      "screenshots/QR Code on Kaata/screenshot_1.png",
+      "screenshots/QR Code on Kaata/screenshot_2.png"
+    ]
+  }
+]
