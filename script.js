@@ -27,7 +27,7 @@ async function loadAddons() {
 
 // Detect mobile vs desktop and open WhatsApp properly
 function contactOnWhatsApp(addonName) {
-  const phone = "923147050300"; // 👈 your WhatsApp number (no +, no spaces)
+  const phone = "923147050300"; //WhatsApp number (no +, no spaces)
   const message = `Inquiry: ${addonName}`;
   const encodedMessage = encodeURIComponent(message);
 
@@ -226,4 +226,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Load addons
   loadAddons();
+
 });
