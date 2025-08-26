@@ -1,22 +1,5 @@
 [
   {
-    "id": "addon1",
-    "name": "Better Export",
-    "type": "free",
-    "icon": "icons/free/better_export.png",
-    "shortdescription": "Export beautiful, print-ready invoices in PDF with your logo and full styling.",
-    "longdescription": "Say goodbye to plain, unprofessional invoices. This addon transforms your order exports into sleek, A4-sized PDFs designed for printing or sharing. Includes your company logo, formatted customer details, a clean item table, and smart totals. You can save the invoice as a PDF or export it as a high-quality JPEG. Built for clarity and presentation — ideal for client handovers, records, or email attachments.",
-    "file": "addons/free/better_export.addon",
-    "version": "1.0",
-    "author": "Sclera Games",
-    "minAppVersion": "1.2.1",
-    "color": "#10A5D5",
-    "screenshots": [
-      "screenshots/Better Export/screenshot_1.png",
-      "screenshots/Better Export/screenshot_2.png"
-    ]
-  },
-  {
     "id": "addon2",
     "name": "Better Export V2",
     "type": "premium",
