@@ -67,5 +67,22 @@
       "screenshots/QR Code on Kaata/screenshot_1.png",
       "screenshots/QR Code on Kaata/screenshot_2.png"
     ]
+  },
+  {
+    "id": "addon5",
+    "name": "Combine Prints",
+    "type": "free",
+    "icon": "icons/paid/combine_prints.png",
+    "shortdescription": "Combine two bills side-by-side on a single A4 page — rotated for perfect vertical printing.",
+    "longdescription": "Combine Bills Side-by-Side is a powerful printing enhancement addon designed to streamline your invoice workflow in SOMS. This tool allows you to merge two bills — whether from order history, the current invoice, or even a blank template — and place them side-by-side on a single A4 page, automatically rotated to portrait for clean, vertical printing. No more wasting paper or misaligned prints. Whether you're combining two customer orders, pairing an invoice with an empty form, or preparing documents for double-sided printing, this addon delivers professional, space-efficient output with just a few clicks. ",
+    "file": "addons/free/combine_prints.addon",
+    "version": "1.0",
+    "author": "Sclera Games",
+    "minAppVersion": "1.2.2",
+    "color": "#2061DF",
+    "screenshots": [
+      "screenshots/Combine Prints/screenshot_1.png",
+      "screenshots/Combine Prints/screenshot_2.png"
+    ]
   }
 ]
