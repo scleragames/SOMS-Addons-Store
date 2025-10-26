@@ -1,41 +1,6 @@
 [
   {
     "id": "addon1",
-    "name": "Better Export",
-    "type": "free",
-    "icon": "icons/free/better_export.png",
-    "shortdescription": "Export beautiful, print-ready invoices in PDF with your logo and full styling.",
-    "longdescription": "Say goodbye to plain, unprofessional invoices. This addon transforms your order exports into sleek, A4-sized PDFs designed for printing or sharing. Includes your company logo, formatted customer details, a clean item table, and smart totals. You can save the invoice as a PDF or export it as a high-quality JPEG. Built for clarity and presentation — ideal for client handovers, records, or email attachments.",
-    "file": "addons/free/better_export.addon",
-    "version": "1.0",
-    "author": "Sclera Games",
-    "minAppVersion": "1.2.1",
-    "color": "#10A5D5",
-    "screenshots": [
-      "screenshots/Better Export/screenshot_1.png",
-      "screenshots/Better Export/screenshot_2.png"
-    ]
-  },
-  {
-    "id": "addon2",
-    "name": "Better Export V2",
-    "type": "premium",
-    "icon": "icons/paid/better_export_v2.png",
-    "shortdescription": "Advanced invoice export with PDF, JPEG, print options, and empty manual bills. ",
-    "longdescription": "Take full control of your invoice workflow. This upgraded export tool lets you print, save as PDF, or export as JPEG — all from one clean menu. It also introduces empty manual bills: generate a printable invoice template with blank rows, perfect for handwriting orders on-site. Whether you need a polished digital invoice or a physical form for field use, this addon delivers flexibility and professionalism in every document.",
-    "file": "",
-    "version": "1.0",
-    "author": "Sclera Games",
-    "minAppVersion": "1.2.1",
-    "color": "#D60C7B",
-    "screenshots": [
-      "screenshots/Better Export V2/screenshot_1.png",
-      "screenshots/Better Export V2/screenshot_2.png",
-      "screenshots/Better Export V2/screenshot_3.png"
-    ]
-  },
-  {
-    "id": "addon3",
     "name": "QR Code on Orders",
     "type": "premium",
     "icon": "icons/paid/qr_code_button_in_order_history.png",
@@ -52,7 +17,7 @@
     ]
   },
   {
-    "id": "addon4",
+    "id": "addon2",
     "name": "QR Code on Kaata",
     "type": "premium",
     "icon": "icons/paid/qr_code_on_kaata.png",
@@ -66,23 +31,6 @@
     "screenshots": [
       "screenshots/QR Code on Kaata/screenshot_1.png",
       "screenshots/QR Code on Kaata/screenshot_2.png"
-    ]
-  },
-  {
-    "id": "addon5",
-    "name": "Combine Prints",
-    "type": "free",
-    "icon": "icons/free/combine_prints.png",
-    "shortdescription": "Combine two bills side-by-side on a single A4 page — rotated for perfect vertical printing.",
-    "longdescription": "Combine Bills Side-by-Side is a powerful printing enhancement addon designed to streamline your invoice workflow in SOMS. This tool allows you to merge two bills — whether from order history, the current invoice, or even a blank template — and place them side-by-side on a single A4 page, automatically rotated to portrait for clean, vertical printing. No more wasting paper or misaligned prints. Whether you're combining two customer orders, pairing an invoice with an empty form, or preparing documents for double-sided printing, this addon delivers professional, space-efficient output with just a few clicks. ",
-    "file": "addons/free/combine_prints.addon",
-    "version": "1.0",
-    "author": "Sclera Games",
-    "minAppVersion": "1.2.2",
-    "color": "#9852D9",
-    "screenshots": [
-      "screenshots/Combine Prints/screenshot_1.png",
-      "screenshots/Combine Prints/screenshot_2.png"
     ]
   }
 ]
